@@ -3,9 +3,10 @@ import sys
 import random
 from pettingzoo import ParallelEnv
 from gymnasium import spaces
+from labirynth import labirynth
 
 WIDTH, HEIGHT = 800, 600
-CELL_SIZE = 40
+CELL_SIZE = 30
 GRID_W = WIDTH // CELL_SIZE
 GRID_H = HEIGHT // CELL_SIZE
 
@@ -41,6 +42,8 @@ class CatMouseEnv(ParallelEnv):
         self.cat_pos = [0, 0]
         self.mouse_pos = [GRID_W - 1, GRID_H - 1]
         self.game_over = False
+
+        self.grid = labirynth(GRID_W, GRID_H, 0.3)
         observations = {agent: self._get_obs() for agent in self.agents}
         infos = {agent: {} for agent in self.agents}
         return observations, infos
@@ -145,16 +148,16 @@ class CatMouseEnv(ParallelEnv):
             pygame.draw.rect(surface, (0, 0, 0), shadow_rect)
             surface.blit(text_surface, text_rect)
 
-
 def main():
     pygame.init()
     pygame.font.init()
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("PettingZoo Multi-Agent Environment")
     clock = pygame.time.Clock()
-
     env = CatMouseEnv()
     step_timer = 0
+
+  
 
     move_map = {
         0: (0, -1),
